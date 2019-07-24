@@ -1,0 +1,13 @@
+---
+# tasks file for .
+
+- name: enable epel
+  package:
+    name: epel-release
+    state: present
+  register: epel-installed
+
+- name: Debug info
+  debug:
+    var:
+      epel-installed
