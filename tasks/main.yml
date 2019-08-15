@@ -9,3 +9,21 @@
   become: true
   yum:
     name: "{{ nrpe_packages }}"
+  register: nrpe_installed
+
+- name: Ensure NRPE is configured correctly
+  template:
+    src: nrpe.cfg.j2
+    dest: /etc/nagios/nrpe.cfg
+    group: root
+    owner: root
+    setype: nrpe_etc_t
+    mode: 0644
+  notify: nrpe_restart
+  when: nrpe_installed is changed
+    
+- name: Ensure NRPE is enabled and running
+  service:
+    name: nrpe
+    enabled: true
+    state: started
