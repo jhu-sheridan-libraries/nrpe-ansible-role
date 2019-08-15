@@ -1,9 +1,11 @@
 ---
 - name: Ensure EPEL is installed
+  become: true
   yum:
     name: epel-release
     state: present
 
 - name: Ensure packages are installed
+  become: true
   yum:
     name: "{{ nrpe_packages }}"
