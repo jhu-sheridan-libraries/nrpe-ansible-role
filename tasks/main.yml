@@ -1,13 +1,9 @@
 ---
-# tasks file for .
-
-- name: enable epel
-  package:
+- name: Ensure EPEL is installed
+  yum:
     name: epel-release
     state: present
-  register: epel-installed
 
-- name: Debug info
-  debug:
-    var:
-      epel-installed
+- name: Ensure packages are installed
+  yum:
+    name: "{{ nrpe_packages }}"
