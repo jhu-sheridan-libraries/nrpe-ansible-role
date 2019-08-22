@@ -1,7 +1,2 @@
 ---
 # defaults file for .
-
-nrpe_packages:
-  - nrpe
-  - nrpe-selinux
-  - nagios-plugins-nrpe

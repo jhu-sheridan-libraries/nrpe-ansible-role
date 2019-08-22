@@ -1,0 +1,12 @@
+- name: Gather ansible service facts
+  service_facts:
+  
+- name: Ensure firewalld ports are open for Nagios server
+  become: true
+  firewalld:
+    source: "{{ nagios_servers }}"
+    state: enabled
+    permanent: true
+    port: "5666/tcp"
+    immediate: true
+  when: ansible_facts.services['firewalld.service']['status'] == "enabled"

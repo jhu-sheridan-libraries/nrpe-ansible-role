@@ -1,17 +1,29 @@
 ---
+
+- include_vars:
+    file: "{{ansible_distribution}}.yml"
+
+- include_vars:
+    file: "{{ansible_distribution}}-{{ansible_distribution_major_version}}.yml"
+
+- include_tasks:
+    file: "{{ansible_distribution}}-{{ ansible_distribution_major_version}}.yml"
+
 - name: Ensure EPEL is installed
   become: true
   yum:
     name: epel-release
     state: present
+  when: ansible_os_family == "RedHat"
 
 - name: Ensure packages are installed
   become: true
   yum:
     name: "{{ nrpe_packages }}"
-  register: nrpe_installed
+  notify: restart nrpe
 
 - name: Ensure NRPE is configured correctly
+  become: true
   template:
     src: nrpe.cfg.j2
     dest: /etc/nagios/nrpe.cfg
@@ -19,11 +31,14 @@
     owner: root
     setype: nrpe_etc_t
     mode: 0644
-  notify: nrpe_restart
-  when: nrpe_installed is changed
-    
+  notify: restart nrpe
+
 - name: Ensure NRPE is enabled and running
+  become: true
   service:
     name: nrpe
     enabled: true
     state: started
+
+- name: Gather facts on Systemd Services
+  service_facts:
