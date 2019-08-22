@@ -1,2 +1,5 @@
 ---
 # vars file for .
+
+nrpe_check_files:
+  - check_disk.cfg

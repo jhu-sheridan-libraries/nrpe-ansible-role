@@ -3,3 +3,6 @@ nrpe_packages:
   - nrpe
   - nrpe-selinux
   - nagios-plugins-nrpe
+  - nagios-plugins-disk
+
+nrpe_service_name: nrpe
